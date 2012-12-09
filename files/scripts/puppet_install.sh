@@ -19,8 +19,16 @@ debian_install() {
 
 centos_install() {
   echo -e "\033[0;32mConfigure puppetlabs repo for YUM...\033[0m"
-  rpm -ivh http://yum.puppetlabs.com/el/6/products/i386/puppetlabs-release-6-6.noarch.rpm > /dev/null 2>&1
-  centos_puppet_install
+  case $MAJOR_VERSION in
+    "5")
+      rpm -ivh http://yum.puppetlabs.com/el/5/products/i386/puppetlabs-release-5-6.noarch.rpm > /dev/null 2>&1
+      centos_puppet_install;;
+    "6")
+      rpm -ivh http://yum.puppetlabs.com/el/6/products/i386/puppetlabs-release-6-6.noarch.rpm > /dev/null 2>&1
+      centos_puppet_install;;
+    "*")
+      echo -e "\033[0;33mCentos $MAJOR_VERSION no supported...\033[0m" && exit ;;
+  esac
 }
 
 centos_puppet_install() {
