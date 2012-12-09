@@ -13,8 +13,7 @@ debian_install() {
   (cd /tmp &&
   wget -q http://apt.puppetlabs.com/puppetlabs-release-precise.deb &&
   dpkg -i puppetlabs-release-precise.deb &&
-  cd -) 2>&1 > /dev/null
-
+  cd -) > /dev/null 2>&1
   debian_puppet_install
 }
 
@@ -31,9 +30,9 @@ centos_puppet_install() {
 
 debian_puppet_install() {
   echo -e "\033[0;34mAPT update...\033[0m"
-  apt-get update 2>&1 > /dev/null
+  apt-get update > /dev/null 2>&1
   echo -e "\033[0;32mInstalling puppet $PUPPET_VERSION$PUPPET_DEBIAN_SUFFIX via apt...\033[0m"
-  apt-get -q -y -o dpkg::options::=--force-confold install puppet=$PUPPET_VERSION$PUPPET_DEBIAN_SUFFIX puppet-common=$PUPPET_VERSION$PUPPET_DEBIAN_SUFFIX > /dev/null
+  apt-get -q -y -o dpkg::options::=--force-confold install puppet=$PUPPET_VERSION$PUPPET_DEBIAN_SUFFIX puppet-common=$PUPPET_VERSION$PUPPET_DEBIAN_SUFFIX > /dev/null 2>&1
   echo -e "\033[0;32mPrevent puppet update by creating a APT preferences file...\033[0m"
   cat << EOF > /etc/apt/preferences.d/puppet.pref
 # Prevent puppet upgrades
@@ -48,7 +47,7 @@ EOF
 
 gem_puppet_install() {
   echo -e "\033[0;32mInstalling Puppet $PUPPET_VERSION...\033[0m"
-  (gem install --no-ri --no-rdoc --version=$PUPPET_VERSION puppet) 2>&1 > /dev/null
+  (gem install --no-ri --no-rdoc --version=$PUPPET_VERSION puppet) > /dev/null 2>&1
   if [ $? -eq 0 ]; then
     echo -e "\033[0;32mPuppet $PUPPET_VERSION is now installed.\033[0m"
   fi
