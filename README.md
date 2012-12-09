@@ -8,6 +8,7 @@ Work in progress.
 Tested on :
 
 * Debian squeeze
+* Debian wheezy/sid
 * CentOS 6.3
 
 
