@@ -19,7 +19,14 @@ debian_install() {
 }
 
 centos_install() {
-  exit
+  echo -e "\033[0;32mConfigure puppetlabs repo for YUM...\033[0m"
+  rpm -ivh http://yum.puppetlabs.com/el/6/products/i386/puppetlabs-release-6-6.noarch.rpm > /dev/null 2>&1
+  centos_puppet_install
+}
+
+centos_puppet_install() {
+  echo -e "\033[0;32mInstalling puppet $PUPPET_VERSION via YUM...\033[0m"
+  yum install puppet-$PUPPET_VERSION -y > /dev/null 2>&1
 }
 
 debian_puppet_install() {
@@ -64,7 +71,7 @@ echo -e "\033[0;34m  * Major version      : $MAJOR_VERSION\033[0m"
 case $DISTRO in
   "Debian" ) debian_install ;;
   "Ubuntu" ) debian_install;;
-  # "Centos" ) centos_install ;;
+  "CentOS" ) centos_install ;;
   * ) echo -e "\033[0;33mLinux Distro $DISTRO no supported...\033[0m" && exit ;;
 esac
 
