@@ -3,7 +3,7 @@
 
 export PATH=/usr/bin:/bin:/usr/sbin:/sbin
 
-if ! [ -n "$PUPPET_VERSION" ]; then export PUPPET_VERSION="3.0.0"; fi
+if ! [ -n "$PUPPET_VERSION" ]; then export PUPPET_VERSION="3.0.1"; fi
 if ! [ -n "$PUPPET_DEBIAN_SUFFIX" ]; then export PUPPET_DEBIAN_SUFFIX="-1puppetlabs1"; fi
 
 debian_install() {
