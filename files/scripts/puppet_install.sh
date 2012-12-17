@@ -8,17 +8,19 @@ if ! [ -n "$PUPPET_DEBIAN_SUFFIX" ]; then export PUPPET_DEBIAN_SUFFIX="-1puppetl
 
 debian_install() {
   export DEBIAN_FRONTEND=noninteractive
-
+  lsb_release_install
   echo -e "\033[0;32mConfigure puppetlabs repo for APT...\033[0m"
   (cd /tmp &&
-  wget -q http://apt.puppetlabs.com/puppetlabs-release-precise.deb &&
-  dpkg -i puppetlabs-release-precise.deb &&
+  wget -q http://apt.puppetlabs.com/puppetlabs-release-$DISTRIB_CODENAME.deb &&
+  dpkg -i puppetlabs-release-$DISTRIB_CODENAME.deb &&
   cd -) > /dev/null 2>&1
   debian_puppet_install
 }
 
 centos_install() {
+  lsb_release_install
   echo -e "\033[0;32mConfigure puppetlabs repo for YUM...\033[0m"
+  MAJOR_VERSION=$(echo $DISTRIB_RELEASE | cut -d"." -f1)
   case $MAJOR_VERSION in
     "5")
       rpm -ivh http://yum.puppetlabs.com/el/5/products/i386/puppetlabs-release-5-6.noarch.rpm > /dev/null 2>&1
@@ -31,6 +33,33 @@ centos_install() {
   esac
 }
 
+lsb_release_install() {
+  echo -e "\033[0;34mLooking for lsb_release...\033[0m"
+  which lsb_release > /dev/null 2>&1
+  if [ $? -ne 0 ]; then
+    case $DISTRIB_ID in
+      "Debian" )
+        debian_lsb_release_install;;
+      "Ubuntu" )
+        debian_lsb_release_install;;
+      "CentOS" )
+        centos_lsb_release_install;;
+    esac
+  fi
+  DISTRIB_RELEASE=$(lsb_release -s -r)
+  DISTRIB_CODENAME=$(lsb_release -s -c)
+}
+
+debian_lsb_release_install() {
+  echo -e "\033[0;32mInstalling lsb-release via APT..\033[0m"
+  apt-get -q -y -o dpkg::options::=--force-confold install lsb-release > /dev/null 2>&1
+}
+
+centos_lsb_release_install() {
+  echo -e "\033[0;32mInstalling lsb-release via YUM...\033[0m"
+  yum install redhat-lsb -y > /dev/null 2>&1
+}
+
 centos_puppet_install() {
   echo -e "\033[0;32mInstalling puppet $PUPPET_VERSION via YUM...\033[0m"
   yum install puppet-$PUPPET_VERSION -y > /dev/null 2>&1
@@ -39,7 +68,7 @@ centos_puppet_install() {
 debian_puppet_install() {
   echo -e "\033[0;34mAPT update...\033[0m"
   apt-get update > /dev/null 2>&1
-  echo -e "\033[0;32mInstalling puppet $PUPPET_VERSION$PUPPET_DEBIAN_SUFFIX via apt...\033[0m"
+  echo -e "\033[0;32mInstalling puppet $PUPPET_VERSION$PUPPET_DEBIAN_SUFFIX via APT...\033[0m"
   apt-get -q -y -o dpkg::options::=--force-confold install puppet=$PUPPET_VERSION$PUPPET_DEBIAN_SUFFIX puppet-common=$PUPPET_VERSION$PUPPET_DEBIAN_SUFFIX > /dev/null 2>&1
   echo -e "\033[0;32mPrevent puppet update by creating a APT preferences file...\033[0m"
   cat << EOF > /etc/apt/preferences.d/puppet.pref
@@ -70,15 +99,14 @@ fi
 echo -e "\033[0;34mPuppet version to install is $PUPPET_VERSION...\033[0m"
 
 echo -e "\033[0;34mLooking for the current Linux distribution...\033[0m"
-DISTRO=$(head -n1 /etc/issue | grep -Eo "(Debian|CentOS)")
-MAJOR_VERSION=$(head -n1 /etc/issue | sed -r "s/^.*([1-9]+)\..*$/\1/")
-echo -e "\033[0;34m  * Linux distribution : $DISTRO\033[0m"
-echo -e "\033[0;34m  * Major version      : $MAJOR_VERSION\033[0m"
+DISTRIB_ID=$(head -n1 /etc/issue | grep -Eo "(Debian|CentOS|Ubuntu)")
 
-case $DISTRO in
+echo -e "\033[0;34m  * Linux distribution : $DISTRIB_ID\033[0m"
+
+case $DISTRIB_ID in
   "Debian" ) debian_install ;;
   "Ubuntu" ) debian_install;;
   "CentOS" ) centos_install ;;
-  * ) echo -e "\033[0;33mLinux Distro $DISTRO no supported...\033[0m" && exit ;;
+  * ) echo -e "\033[0;33mLinux Distribution $DISTRIB_ID no supported...\033[0m" && exit ;;
 esac
 
