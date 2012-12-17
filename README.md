@@ -7,8 +7,7 @@ Work in progress.
 
 Tested on :
 
-* Debian squeeze
-* Debian wheezy/sid
+* Debian {squeeze,wheezy}
+* Ubuntu 12.10 (quanta)
 * CentOS 6.3
-
 
