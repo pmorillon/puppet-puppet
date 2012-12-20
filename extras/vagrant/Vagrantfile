@@ -1,0 +1,9 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant::Config.run do |config|
+  config.vm.box = "debian-squeeze-x64-puppet_3.0.1"
+  config.vm.box_url = "https://vagrant.irisa.fr/boxes/debian-squeeze-x64-puppet_3.0.1.box"
+  config.vm.network :hostonly, "192.168.33.10"
+  config.vm.forward_port 80, 8080
+end
