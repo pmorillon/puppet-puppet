@@ -1,1 +1,4 @@
 extras/vagrant/.vagrant
+extras/vagrant/.librarian
+extras/vagrant/.tmp
+extras/vagrant/modules
