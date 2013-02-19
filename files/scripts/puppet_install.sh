@@ -3,6 +3,8 @@
 
 export PATH=/usr/bin:/bin:/usr/sbin:/sbin
 
+if ! [ -z "$PROXYFIED" ]; then export http_proxy="http://proxy.$(hostname -d):3128"; fi
+
 if ! [ -n "$PUPPET_VERSION" ]; then export PUPPET_VERSION="3.1.0"; fi
 if ! [ -n "$PUPPET_DEBIAN_SUFFIX" ]; then export PUPPET_DEBIAN_SUFFIX="-1puppetlabs1"; fi
 

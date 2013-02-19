@@ -4,6 +4,7 @@ Work in progress.
 
     $ curl https://raw.github.com/pmorillon/puppet-puppet/master/files/scripts/puppet_install.sh | sudo sh
     $ curl https://raw.github.com/pmorillon/puppet-puppet/master/files/scripts/puppet_install.sh | sudo PUPPET_VERSION=2.7.19 sh
+    $ curl https://raw.github.com/sbadia/puppet-puppet/master/files/scripts/puppet_install.sh | sudo PROXYFIED=true sh
 
 Tested on :
 
