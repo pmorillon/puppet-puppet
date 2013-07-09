@@ -4,8 +4,8 @@
 export PATH=/usr/bin:/bin:/usr/sbin:/sbin
 
 if ! [ -z "$PROXYFIED" ]; then export http_proxy="http://proxy.$(hostname -d):3128"; fi
-
-if ! [ -n "$PUPPET_VERSION" ]; then export PUPPET_VERSION="3.1.1"; fi
+if ! [ -n "$PREVENT_UPDATE" ]; then export PREVENT_UPDATE="yes"; fi
+if ! [ -n "$PUPPET_VERSION" ]; then export PUPPET_VERSION="3.2.2"; fi
 if ! [ -n "$PUPPET_DEBIAN_SUFFIX" ]; then export PUPPET_DEBIAN_SUFFIX="-1puppetlabs1"; fi
 
 debian_install() {
@@ -72,13 +72,15 @@ debian_puppet_install() {
   apt-get update > /dev/null 2>&1
   echo "\033[0;32mInstalling puppet $PUPPET_VERSION$PUPPET_DEBIAN_SUFFIX via APT...\033[0m"
   apt-get -q -y -o dpkg::options::=--force-confold install puppet=$PUPPET_VERSION$PUPPET_DEBIAN_SUFFIX puppet-common=$PUPPET_VERSION$PUPPET_DEBIAN_SUFFIX > /dev/null 2>&1
-  echo "\033[0;32mPrevent puppet update by creating a APT preferences file...\033[0m"
-  cat << EOF > /etc/apt/preferences.d/puppet.pref
+  if [ "$PREVENT_UPDATE" = "yes" ];then
+    echo "\033[0;32mPrevent puppet update by creating a APT preferences file...\033[0m"
+    cat << EOF > /etc/apt/preferences.d/puppet.pref
 # Prevent puppet upgrades
 Package: puppet puppet-common facter hiera
 Pin: release main
 Pin-Priority: -1
 EOF
+  fi
   if [ $? -eq 0 ]; then
     echo "\033[0;32mPuppet $PUPPET_VERSION is now installed.\033[0m"
   fi
