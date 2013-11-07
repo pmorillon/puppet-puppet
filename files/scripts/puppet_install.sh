@@ -5,7 +5,7 @@ export PATH=/usr/bin:/bin:/usr/sbin:/sbin
 
 if ! [ -z "$PROXYFIED" ]; then export http_proxy="http://proxy.$(hostname -d):3128"; fi
 if ! [ -n "$PREVENT_UPDATE" ]; then export PREVENT_UPDATE="yes"; fi
-if ! [ -n "$PUPPET_VERSION" ]; then export PUPPET_VERSION="3.2.2"; fi
+if ! [ -n "$PUPPET_VERSION" ]; then export PUPPET_VERSION="3.3.1"; fi
 if ! [ -n "$PUPPET_DEBIAN_SUFFIX" ]; then export PUPPET_DEBIAN_SUFFIX="-1puppetlabs1"; fi
 
 debian_install() {
