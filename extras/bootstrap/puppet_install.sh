@@ -23,10 +23,13 @@ centos_install() {
   MAJOR_VERSION=$(echo $DISTRIB_RELEASE | cut -d"." -f1)
   case $MAJOR_VERSION in
     "5")
-      rpm -ivh http://yum.puppetlabs.com/el/5/products/i386/puppetlabs-release-5-6.noarch.rpm > /dev/null 2>&1
+      rpm -ivh http://yum.puppetlabs.com/el/5/products/x86_64/puppetlabs-release-5-6.noarch.rpm > /dev/null 2>&1
       centos_puppet_install;;
     "6")
-      rpm -ivh http://yum.puppetlabs.com/el/6/products/i386/puppetlabs-release-6-6.noarch.rpm > /dev/null 2>&1
+      rpm -ivh http://yum.puppetlabs.com/el/6/products/x86_64/puppetlabs-release-6-6.noarch.rpm > /dev/null 2>&1
+      centos_puppet_install;;
+    "7")
+      rpm -ivh http://yum.puppetlabs.com/el/7/products/x86_64/puppetlabs-release-7-10.noarch.rpm > /dev/null 2>&1
       centos_puppet_install;;
     "*")
       echo -e "\033[0;33mCentos $MAJOR_VERSION no supported...\033[0m" && exit ;;
@@ -100,6 +103,9 @@ echo -e "\033[0;34mPuppet version to install is $PUPPET_VERSION...\033[0m"
 
 echo -e "\033[0;34mLooking for the current Linux distribution...\033[0m"
 DISTRIB_ID=$(head -n1 /etc/issue | grep -Eo "(Debian|CentOS|Ubuntu)")
+if [ -n $DISTRIB_ID ]; then
+  DISTRIB_ID=$(grep -Eo "CentOS" /etc/redhat-release)
+fi
 
 echo -e "\033[0;34m  * Linux distribution : $DISTRIB_ID\033[0m"
 
