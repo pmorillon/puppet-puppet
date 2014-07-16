@@ -103,7 +103,7 @@ echo -e "\033[0;34mPuppet version to install is $PUPPET_VERSION...\033[0m"
 
 echo -e "\033[0;34mLooking for the current Linux distribution...\033[0m"
 DISTRIB_ID=$(head -n1 /etc/issue | grep -Eo "(Debian|CentOS|Ubuntu)")
-if [ -n $DISTRIB_ID ]; then
+if ! [ -n $DISTRIB_ID ]; then
   DISTRIB_ID=$(grep -Eo "CentOS" /etc/redhat-release)
 fi
 
