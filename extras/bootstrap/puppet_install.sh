@@ -10,6 +10,7 @@ debian_install() {
   export DEBIAN_FRONTEND=noninteractive
   lsb_release_install
   echo -e "\033[0;32mConfigure puppetlabs repo for APT...\033[0m"
+  if [ "$DISTRIB_CODENAME" = "jessie" ]; then export $DISTRIB_CODENAME=testing; echo -e "[DEBUG] $DISTRIB_CODENAME"; fi
   (cd /tmp &&
   wget -q http://apt.puppetlabs.com/puppetlabs-release-$DISTRIB_CODENAME.deb &&
   dpkg -i puppetlabs-release-$DISTRIB_CODENAME.deb &&
@@ -115,4 +116,3 @@ case $DISTRIB_ID in
   "CentOS" ) centos_install ;;
   * ) echo -e "\033[0;33mLinux Distribution $DISTRIB_ID no supported...\033[0m" && exit ;;
 esac
-
