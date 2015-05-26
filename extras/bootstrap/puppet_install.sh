@@ -10,7 +10,7 @@ debian_install() {
   export DEBIAN_FRONTEND=noninteractive
   lsb_release_install
   echo -e "\033[0;32mConfigure puppetlabs repo for APT...\033[0m"
-  if [ "$DISTRIB_CODENAME" = "jessie" ]; then export $DISTRIB_CODENAME=testing; echo -e "[DEBUG] $DISTRIB_CODENAME"; fi
+  if [ "$DISTRIB_CODENAME" = "jessie" ]; then export DISTRIB_CODENAME=testing; fi
   (cd /tmp &&
   wget -q http://apt.puppetlabs.com/puppetlabs-release-$DISTRIB_CODENAME.deb &&
   dpkg -i puppetlabs-release-$DISTRIB_CODENAME.deb &&
